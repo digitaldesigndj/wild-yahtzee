@@ -1,14 +1,15 @@
 import { motion } from 'motion/react';
 import { Star, Lock, RefreshCw } from 'lucide-react';
 import { DieState, DieValue } from '../types';
+import { audio } from '../utils/audio';
 
 interface DiceCupProps {
   dice: DieState[];
   rollsLeft: number;
   isRolling: boolean;
+  currentRound: number;
   onRoll: () => void;
   onToggleHold: (id: number) => void;
-  onResetTurn: () => void;
 }
 
 // 3x3 grid indexing:
@@ -30,12 +31,14 @@ function Die({
   rolling,
   onClick,
   disabled,
+  unrolled,
 }: {
   value: DieValue;
   held: boolean;
   rolling: boolean;
   onClick: () => void;
   disabled: boolean;
+  unrolled: boolean;
   key?: number;
 }) {
   const isWild = value === 'W';
@@ -97,6 +100,8 @@ function Die({
                       ${
                         held
                           ? 'bg-emerald-800 shadow-[inset_0_1px_1px_rgba(0,0,0,0.2)]'
+                          : unrolled
+                          ? 'bg-slate-300 shadow-[inset_0_1px_1px_rgba(0,0,0,0.1)]'
                           : 'bg-slate-800 shadow-[inset_0_1px_1px_rgba(0,0,0,0.4)]'
                       }
                     `}
@@ -136,9 +141,9 @@ export default function DiceCup({
   dice,
   rollsLeft,
   isRolling,
+  currentRound,
   onRoll,
   onToggleHold,
-  onResetTurn,
 }: DiceCupProps) {
   const hasUnusedRolls = rollsLeft > 0;
   const isCupEmpty = dice.every((d) => d.value === 1 && !d.held && rollsLeft === 3); // initial state
@@ -147,7 +152,7 @@ export default function DiceCup({
     <div className="bg-slate-50 border border-slate-200/60 rounded-3xl p-6 shadow-[inset_0_2px_4px_rgba(0,0,0,0.02),_0_10px_30px_-10px_rgba(0,0,0,0.04)] flex flex-col items-center">
       {/* Dice Tray Header */}
       <div className="w-full flex justify-between items-center mb-6">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           <span className="text-sm font-bold text-slate-400 uppercase tracking-widest font-mono">
             Dice Tray
           </span>
@@ -168,9 +173,15 @@ export default function DiceCup({
           </div>
         </div>
 
-        <span className="text-xs font-mono font-medium text-slate-500">
-          {rollsLeft === 3 ? 'First Roll' : `Rolls Remaining: ${rollsLeft}`}
-        </span>
+        <div className="flex items-center gap-2">
+          {/* Round Indicator Badge */}
+          <span className="bg-emerald-100 text-emerald-800 font-extrabold text-[10px] font-mono px-2 py-1 rounded-lg uppercase tracking-wide">
+            Round {currentRound} / 13
+          </span>
+          <span className="text-xs font-mono font-medium text-slate-500 bg-slate-200/50 px-2.5 py-1 rounded-lg">
+            {rollsLeft === 3 ? 'First Roll' : `Rolls: ${rollsLeft}`}
+          </span>
+        </div>
       </div>
 
       {/* Active Dice Row */}
@@ -181,7 +192,14 @@ export default function DiceCup({
             value={die.value}
             held={die.held}
             rolling={die.rolling}
-            onClick={() => onToggleHold(die.id)}
+            unrolled={rollsLeft === 3}
+            onClick={() => {
+              // Only play hold sound if the die is interactive (not wild, since wilds are locked)
+              if (die.value !== 'W' && rollsLeft < 3 && !isRolling) {
+                audio.playHold();
+              }
+              onToggleHold(die.id);
+            }}
             disabled={rollsLeft === 3 || isRolling} // cannot hold before the first roll has been made
           />
         ))}
@@ -235,17 +253,6 @@ export default function DiceCup({
             ? 'Roll Dice'
             : `Roll Remaining (${rollsLeft})`}
         </motion.button>
-
-        {rollsLeft < 3 && (
-          <button
-            id="reset-turn-button"
-            onClick={onResetTurn}
-            disabled={isRolling}
-            className="text-xs font-bold text-slate-500 hover:text-red-500 cursor-pointer transition-colors px-4 py-2"
-          >
-            Reset Turn
-          </button>
-        )}
       </div>
     </div>
   );

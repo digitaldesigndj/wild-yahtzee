@@ -21,6 +21,8 @@ import DiceCup from './components/DiceCup';
 import ScorecardTable from './components/ScorecardTable';
 import StatsPanel from './components/StatsPanel';
 import Confetti from './components/Confetti';
+import Fireworks from './components/Fireworks';
+import { audio } from './utils/audio';
 
 const INITIAL_DICE: DieState[] = [
   { id: 1, value: 1, held: false, rolling: false },
@@ -65,6 +67,7 @@ export default function App() {
   
   // Celebration States
   const [confettiActive, setConfettiActive] = useState<boolean>(false);
+  const [fireworksActive, setFireworksActive] = useState<boolean>(false);
   const [currentTurnYahtzeeTriggered, setCurrentTurnYahtzeeTriggered] = useState<boolean>(false);
   
   // Game Lifecycle States
@@ -75,6 +78,12 @@ export default function App() {
   // Statistics States
   const [stats, setStats] = useState<GameStats>(DEFAULT_STATS);
   const [history, setHistory] = useState<GameHistoryEntry[]>([]);
+
+  // Compute current round (1-13) based on scored slots
+  const currentRound = Math.min(
+    13,
+    Object.values(scorecard).filter((val) => val !== null).length + 1
+  );
 
   // Load stats and history from localStorage
   useEffect(() => {
@@ -117,6 +126,7 @@ export default function App() {
     if (rollsLeft === 0 || isRolling) return;
 
     setIsRolling(true);
+    audio.playRoll();
     
     // Set rolling state to trigger die flip animations
     setDice((prev) =>
@@ -171,6 +181,7 @@ export default function App() {
 
       // Save statistics for wilds rolled
       if (rolledWildsThisRoll > 0) {
+        audio.playWild();
         setSessionWildsCount((prev) => prev + rolledWildsThisRoll);
         setStats((prev) => {
           const updated = {
@@ -187,6 +198,7 @@ export default function App() {
       if (isYahtzeeRoll(valuesOnly)) {
         // If a Yahtzee is rolled, celebrate with confetti!
         if (!currentTurnYahtzeeTriggered) {
+          audio.playYahtzee();
           setConfettiActive(true);
           setCurrentTurnYahtzeeTriggered(true);
 
@@ -226,14 +238,6 @@ export default function App() {
     );
   };
 
-  // Reset Turn State (keep same scorecard)
-  const handleResetTurn = () => {
-    if (isRolling) return;
-    setDice(INITIAL_DICE);
-    setRollsLeft(3);
-    setCurrentTurnYahtzeeTriggered(false);
-  };
-
   // Score a Category
   const handleScoreCategory = (id: CategoryId) => {
     if (rollsLeft === 3 || isRolling) return; // must roll at least once
@@ -252,6 +256,11 @@ export default function App() {
 
     if (isOver) {
       setIsGameOver(true);
+      setFireworksActive(true);
+      setTimeout(() => {
+        setFireworksActive(false);
+      }, 10000);
+      audio.playGameOver();
       const gameTotal = getGrandTotal(updatedScorecard, yahtzeeBonusCount);
       
       // Update statistics and history
@@ -287,6 +296,7 @@ export default function App() {
       setStats(updatedStats);
       localStorage.setItem('wild_yahtzee_stats', JSON.stringify(updatedStats));
     } else {
+      audio.playScore();
       // Prepare for next turn
       setDice(INITIAL_DICE);
       setRollsLeft(3);
@@ -303,6 +313,7 @@ export default function App() {
   };
 
   // Start a new game session
+  const [isResettingStats, setIsResettingStats] = useState(false); // just keeping context clean
   const handleRestartGame = () => {
     setScorecard(INITIAL_SCORECARD);
     setDice(INITIAL_DICE);
@@ -312,12 +323,16 @@ export default function App() {
     setIsGameOver(false);
     setCurrentTurnYahtzeeTriggered(false);
     setConfettiActive(false);
+    setFireworksActive(false);
   };
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800 pb-16 relative">
       {/* Confetti Celebration */}
       <Confetti active={confettiActive} onComplete={() => setConfettiActive(false)} />
+
+      {/* Full-screen Fireworks for final game victory celebration */}
+      <Fireworks active={fireworksActive} />
 
       {/* Decorative Top Accent */}
       <div className="h-2 bg-gradient-to-r from-amber-500 via-yellow-400 to-emerald-600 w-full" />
@@ -416,9 +431,9 @@ export default function App() {
               dice={dice}
               rollsLeft={rollsLeft}
               isRolling={isRolling}
+              currentRound={currentRound}
               onRoll={handleRoll}
               onToggleHold={handleToggleHold}
-              onResetTurn={handleResetTurn}
             />
           )}
 
@@ -467,13 +482,10 @@ export default function App() {
               </button>
             </motion.div>
           )}
-
-          {/* Stats & Match History Panel */}
-          <StatsPanel stats={stats} history={history} onResetStats={handleResetStats} />
         </div>
 
-        {/* Scorecard Board */}
-        <div className="lg:col-span-7 flex flex-col gap-4">
+        {/* Scorecard Board & Stats */}
+        <div className="lg:col-span-7 flex flex-col gap-6">
           <ScorecardTable
             scorecard={scorecard}
             dice={dice.map((d) => d.value)}
@@ -481,6 +493,9 @@ export default function App() {
             yahtzeeBonusCount={yahtzeeBonusCount}
             onScoreCategory={handleScoreCategory}
           />
+
+          {/* Stats & Match History Panel (moved below scorecard) */}
+          <StatsPanel stats={stats} history={history} onResetStats={handleResetStats} />
         </div>
       </main>
     </div>
