@@ -10,7 +10,6 @@ import {
   BookOpen,
   ChevronDown,
   ChevronUp,
-  RotateCcw,
   AlertCircle,
   Flame,
 } from 'lucide-react';
@@ -259,7 +258,7 @@ export default function App() {
       setFireworksActive(true);
       setTimeout(() => {
         setFireworksActive(false);
-      }, 10000);
+      }, 15000);
       audio.playGameOver();
       const gameTotal = getGrandTotal(updatedScorecard, yahtzeeBonusCount);
       
@@ -361,15 +360,6 @@ export default function App() {
           >
             <BookOpen className="w-4 h-4 text-slate-500" />
             {showRules ? 'Hide Rules' : 'Show Rules'}
-          </button>
-          
-          <button
-            id="restart-game-button"
-            onClick={handleRestartGame}
-            className="flex items-center gap-2 px-4 py-2 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-600 cursor-pointer shadow-sm transition-all"
-          >
-            <RotateCcw className="w-4 h-4 text-slate-500" />
-            Restart Game
           </button>
         </div>
       </header>

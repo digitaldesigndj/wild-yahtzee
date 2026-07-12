@@ -186,6 +186,71 @@ class AudioSynth {
       osc.stop(time + 0.4);
     });
   }
+
+  playFireworkLaunch() {
+    const ctx = this.init();
+    if (!ctx) return;
+
+    const now = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    osc.type = 'sine';
+    // Rising frequency for the launch whoosh
+    osc.frequency.setValueAtTime(120, now);
+    osc.frequency.exponentialRampToValueAtTime(700, now + 0.35);
+
+    gain.gain.setValueAtTime(0.05, now); // keep launch volume subtle
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.start(now);
+    osc.stop(now + 0.35);
+  }
+
+  playFireworkExplosion() {
+    const ctx = this.init();
+    if (!ctx) return;
+
+    const now = ctx.currentTime;
+
+    // 1. Low Thump/Boom
+    const oscBoom = ctx.createOscillator();
+    const gainBoom = ctx.createGain();
+
+    oscBoom.type = 'triangle';
+    oscBoom.frequency.setValueAtTime(160, now);
+    oscBoom.frequency.exponentialRampToValueAtTime(30, now + 0.45);
+
+    gainBoom.gain.setValueAtTime(0.2, now);
+    gainBoom.gain.exponentialRampToValueAtTime(0.01, now + 0.45);
+
+    oscBoom.connect(gainBoom);
+    gainBoom.connect(ctx.destination);
+
+    oscBoom.start(now);
+    oscBoom.stop(now + 0.45);
+
+    // 2. High Sparkle Crackle (retro sound)
+    const oscSparkle = ctx.createOscillator();
+    const gainSparkle = ctx.createGain();
+
+    oscSparkle.type = 'sine';
+    const randomFreq = 700 + Math.random() * 900;
+    oscSparkle.frequency.setValueAtTime(randomFreq, now);
+    oscSparkle.frequency.linearRampToValueAtTime(randomFreq * 0.4, now + 0.18);
+
+    gainSparkle.gain.setValueAtTime(0.04, now);
+    gainSparkle.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+
+    oscSparkle.connect(gainSparkle);
+    gainSparkle.connect(ctx.destination);
+
+    oscSparkle.start(now);
+    oscSparkle.stop(now + 0.18);
+  }
 }
 
 export const audio = new AudioSynth();

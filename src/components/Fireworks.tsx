@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { audio } from '../utils/audio';
 
 interface FireworksProps {
   active: boolean;
@@ -90,6 +91,8 @@ export default function Fireworks({ active }: FireworksProps) {
       exploded: false,
       trail: [],
     });
+
+    audio.playFireworkLaunch();
   };
 
   const startFireworks = () => {
@@ -162,6 +165,7 @@ export default function Fireworks({ active }: FireworksProps) {
       // Trigger explosion near apex
       if (r.vy >= -1) {
         createSparks(r.x, r.y, r.color);
+        audio.playFireworkExplosion();
         rockets.splice(i, 1);
 
         // Spawn a replacement rocket if we are still active
@@ -246,8 +250,6 @@ export default function Fireworks({ active }: FireworksProps) {
       }
     };
   }, []);
-
-  if (!active) return null;
 
   return (
     <canvas
