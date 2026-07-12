@@ -377,7 +377,7 @@ export default function App() {
       {/* Main Grid Layout */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* Rules Card & Active Controls */}
-        <div className="lg:col-span-5 flex flex-col gap-6">
+        <div className="lg:col-span-5 lg:sticky lg:top-6 flex flex-col gap-6">
           
           {/* Rules and Mechanics panel */}
           <AnimatePresence>
