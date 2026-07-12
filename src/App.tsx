@@ -326,7 +326,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-800 pb-16 relative">
+    <div className="min-h-screen bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-200 pb-16 relative transition-colors duration-300">
       {/* Confetti Celebration */}
       <Confetti active={confettiActive} onComplete={() => setConfettiActive(false)} />
 
@@ -340,14 +340,14 @@ export default function App() {
       <header className="max-w-7xl mx-auto px-4 sm:px-6 pt-10 pb-6 flex flex-col md:flex-row justify-between items-center gap-4">
         <div className="text-center md:text-left">
           <div className="flex items-center justify-center md:justify-start gap-3">
-            <span className="p-2 bg-amber-100 rounded-2xl text-amber-950 border border-amber-300">
+            <span className="p-2 bg-amber-100 rounded-2xl text-amber-950 border border-amber-300 dark:bg-amber-950/40 dark:text-amber-200 dark:border-amber-800">
               <Star className="w-7 h-7 fill-amber-500 stroke-amber-600 animate-pulse" />
             </span>
-            <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 font-sans flex items-center gap-1.5">
+            <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white font-sans flex items-center gap-1.5">
               Wild Yahtzee
             </h1>
           </div>
-          <p className="text-sm text-slate-500 font-medium mt-1">
+          <p className="text-sm text-slate-500 dark:text-slate-400 font-medium mt-1">
             Classic Winning Moves Yahtzee scoring, elevated with a 7-sided Wild card die outcome.
           </p>
         </div>
@@ -356,9 +356,9 @@ export default function App() {
           <button
             id="rules-toggle-button"
             onClick={() => setShowRules(!showRules)}
-            className="flex items-center gap-2 px-4 py-2 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-600 cursor-pointer shadow-sm transition-all"
+            className="flex items-center gap-2 px-4 py-2 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-600 cursor-pointer shadow-sm transition-all dark:bg-slate-900 dark:hover:bg-slate-800 dark:border-slate-800 dark:text-slate-300"
           >
-            <BookOpen className="w-4 h-4 text-slate-500" />
+            <BookOpen className="w-4 h-4 text-slate-500 dark:text-slate-400" />
             {showRules ? 'Hide Rules' : 'Show Rules'}
           </button>
         </div>
@@ -376,16 +376,16 @@ export default function App() {
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
-                className="bg-amber-50/70 border border-amber-200/80 rounded-3xl p-5 shadow-sm text-amber-900/90 relative overflow-hidden"
+                className="bg-amber-50/70 border border-amber-200/80 rounded-3xl p-5 shadow-sm text-amber-900/90 relative overflow-hidden dark:bg-amber-950/20 dark:border-amber-900/50 dark:text-amber-200/90"
               >
                 {/* Visual design embellishments */}
-                <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-amber-200/20 to-yellow-300/30 rounded-bl-full pointer-events-none" />
+                <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-amber-200/20 to-yellow-300/30 rounded-bl-full pointer-events-none dark:from-amber-900/10 dark:to-yellow-800/20" />
                 
-                <h2 className="text-sm font-extrabold uppercase tracking-wider font-mono text-amber-950 mb-3 flex items-center gap-2">
+                <h2 className="text-sm font-extrabold uppercase tracking-wider font-mono text-amber-950 dark:text-amber-300 mb-3 flex items-center gap-2">
                   <Star className="w-4 h-4 fill-amber-500 stroke-amber-600" />
                   The Wild Die Rulebook
                 </h2>
-                <ul className="space-y-2.5 text-xs text-amber-950/80 font-medium">
+                <ul className="space-y-2.5 text-xs text-amber-950/80 dark:text-amber-200/80 font-medium">
                   <li className="flex items-start gap-2">
                     <span className="text-amber-500 font-bold">•</span>
                     <span>

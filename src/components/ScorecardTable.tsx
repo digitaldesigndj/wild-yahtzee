@@ -155,29 +155,29 @@ export default function ScorecardTable({
             onScoreCategory(cat.id);
           }
         }}
-        className={`border-b border-slate-100 transition-colors group ${
+        className={`border-b border-slate-100 dark:border-slate-800/80 transition-colors group ${
           isScored
-            ? 'bg-slate-50/40 text-slate-500'
+            ? 'bg-slate-50/40 text-slate-500 dark:bg-slate-900/20'
             : hasRolled
-            ? 'hover:bg-emerald-50/60 cursor-pointer'
-            : 'text-slate-400'
+            ? 'hover:bg-emerald-50/60 dark:hover:bg-emerald-950/30 cursor-pointer'
+            : 'text-slate-400 dark:text-slate-650'
         }`}
       >
         {/* Name and Description */}
         <td className="py-3.5 px-4">
           <div className="flex flex-col">
-            <span className={`font-semibold text-sm ${isScored ? 'text-slate-400 line-through' : 'text-slate-800'}`}>
+            <span className={`font-semibold text-sm ${isScored ? 'text-slate-400 dark:text-slate-600 line-through' : 'text-slate-800 dark:text-slate-200'}`}>
               {cat.name}
             </span>
-            <span className="text-[11px] text-slate-400 flex items-center gap-1">
-              <Info className="w-3 h-3 text-slate-300" />
+            <span className="text-[11px] text-slate-400 dark:text-slate-500 flex items-center gap-1">
+              <Info className="w-3 h-3 text-slate-300 dark:text-slate-600" />
               {cat.description}
             </span>
           </div>
         </td>
 
         {/* Scoring Guideline */}
-        <td className="py-3.5 px-4 hidden sm:table-cell text-xs font-mono text-slate-400">
+        <td className="py-3.5 px-4 hidden sm:table-cell text-xs font-mono text-slate-400 dark:text-slate-500">
           {cat.scoringGuide}
         </td>
 
@@ -185,7 +185,7 @@ export default function ScorecardTable({
         <td className="py-3.5 px-4 text-right">
           {isScored ? (
             <div className="flex justify-end items-center gap-1.5">
-              <span className="font-mono font-bold text-base text-slate-700">
+              <span className="font-mono font-bold text-base text-slate-700 dark:text-slate-300">
                 {finalScore}
               </span>
               <Check className="w-4 h-4 text-emerald-500" />
@@ -200,15 +200,15 @@ export default function ScorecardTable({
                     px-4 py-1.5 rounded-xl font-bold font-mono text-xs transition-all duration-300 cursor-pointer
                     ${
                       potentialScore > 0
-                        ? 'bg-emerald-100 text-emerald-800 border border-emerald-300 hover:bg-emerald-500 hover:text-white hover:border-emerald-500 hover:shadow-sm'
-                        : 'bg-slate-100 text-slate-500 border border-slate-200 hover:bg-red-100 hover:text-red-700 hover:border-red-300'
+                        ? 'bg-emerald-100 text-emerald-800 border border-emerald-300 hover:bg-emerald-500 hover:text-white hover:border-emerald-500 hover:shadow-sm dark:bg-emerald-950 dark:text-emerald-400 dark:border-emerald-800 dark:hover:bg-emerald-600 dark:hover:text-white dark:hover:border-emerald-600'
+                        : 'bg-slate-100 text-slate-500 border border-slate-200 hover:bg-red-100 hover:text-red-700 hover:border-red-300 dark:bg-slate-800 dark:text-slate-450 dark:border-slate-700 dark:hover:bg-red-950 dark:hover:text-red-400 dark:hover:border-red-900'
                     }
                   `}
                 >
                   {potentialScore > 0 ? `+${potentialScore}` : '0'}
                 </button>
               ) : (
-                <span className="text-xs font-mono text-slate-300 italic">
+                <span className="text-xs font-mono text-slate-300 dark:text-slate-700 italic">
                   Roll first
                 </span>
               )}
@@ -220,28 +220,28 @@ export default function ScorecardTable({
   };
 
   return (
-    <div className="bg-white border border-slate-200 rounded-3xl overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.03)] flex flex-col">
+    <div className="bg-white border border-slate-200 rounded-3xl overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.03)] dark:bg-slate-900 dark:border-slate-800 dark:shadow-none flex flex-col transition-colors duration-300">
       {/* Upper Section Header */}
-      <div className="bg-slate-50 px-6 py-4 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+      <div className="bg-slate-50 dark:bg-slate-900/50 px-6 py-4 border-b border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
         <div>
-          <h3 className="font-bold text-slate-800 tracking-wide text-sm uppercase font-mono">
+          <h3 className="font-bold text-slate-800 dark:text-slate-200 tracking-wide text-sm uppercase font-mono">
             Upper Section
           </h3>
-          <p className="text-xs text-slate-400">Sum Aces, Twos, Threes, Fours, Fives, Sixes</p>
+          <p className="text-xs text-slate-400 dark:text-slate-500">Sum Aces, Twos, Threes, Fours, Fives, Sixes</p>
         </div>
         
         {/* Upper Section Bonus Meter */}
-        <div className="flex items-center gap-3 bg-emerald-50/50 border border-emerald-100 rounded-2xl px-4 py-2">
+        <div className="flex items-center gap-3 bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-100 dark:border-emerald-900/50 rounded-2xl px-4 py-2">
           <div className="flex flex-col text-right">
-            <span className="text-[10px] uppercase font-bold text-emerald-700 tracking-wider font-mono">
+            <span className="text-[10px] uppercase font-bold text-emerald-700 dark:text-emerald-400 tracking-wider font-mono">
               Upper Bonus
             </span>
-            <span className="text-xs font-mono font-bold text-slate-700">
+            <span className="text-xs font-mono font-bold text-slate-700 dark:text-slate-300">
               {upperScoredSum} / 63 points
             </span>
           </div>
 
-          <div className="w-16 bg-slate-200 h-2.5 rounded-full overflow-hidden">
+          <div className="w-16 bg-slate-200 dark:bg-slate-800 h-2.5 rounded-full overflow-hidden">
             <div
               className="bg-emerald-500 h-full rounded-full transition-all duration-500"
               style={{ width: `${Math.min(100, (upperScoredSum / 63) * 100)}%` }}
@@ -250,7 +250,7 @@ export default function ScorecardTable({
 
           <span
             className={`font-mono text-sm font-extrabold ${
-              upperPossibleBonus > 0 ? 'text-emerald-600' : 'text-slate-400'
+              upperPossibleBonus > 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400 dark:text-slate-600'
             }`}
           >
             +{upperPossibleBonus}
@@ -262,7 +262,7 @@ export default function ScorecardTable({
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="bg-slate-50/20 text-[10px] uppercase font-bold text-slate-400 font-mono border-b border-slate-100">
+            <tr className="bg-slate-50/20 dark:bg-slate-900/30 text-[10px] uppercase font-bold text-slate-400 dark:text-slate-500 font-mono border-b border-slate-100 dark:border-slate-800">
               <th className="py-2.5 px-4">Category</th>
               <th className="py-2.5 px-4 hidden sm:table-cell">Scoring</th>
               <th className="py-2.5 px-4 text-right">Points</th>
@@ -272,17 +272,17 @@ export default function ScorecardTable({
             {upperCategories.map(renderCategoryRow)}
             
             {/* Upper Section Summary Rows */}
-            <tr className="bg-slate-50/50 font-bold text-sm text-slate-700 border-b border-slate-200">
+            <tr className="bg-slate-50/50 dark:bg-slate-900/60 font-bold text-sm text-slate-700 dark:text-slate-300 border-b border-slate-200 dark:border-slate-800">
               <td className="py-3 px-4 font-mono uppercase text-xs">Upper Subtotal</td>
               <td className="py-3 px-4 hidden sm:table-cell" />
-              <td className="py-3 px-4 text-right font-mono text-base text-slate-800">
+              <td className="py-3 px-4 text-right font-mono text-base text-slate-800 dark:text-slate-200">
                 {upperScoredSum}
               </td>
             </tr>
-            <tr className="bg-slate-50/50 font-bold text-sm text-slate-700 border-b border-slate-200">
+            <tr className="bg-slate-50/50 dark:bg-slate-900/60 font-bold text-sm text-slate-700 dark:text-slate-300 border-b border-slate-200 dark:border-slate-800">
               <td className="py-3 px-4 font-mono uppercase text-xs">Upper Section Bonus (Needs 63+)</td>
-              <td className="py-3 px-4 hidden sm:table-cell text-xs text-slate-400 font-normal">Score +35</td>
-              <td className="py-3 px-4 text-right font-mono text-base text-emerald-600">
+              <td className="py-3 px-4 hidden sm:table-cell text-xs text-slate-400 dark:text-slate-500 font-normal">Score +35</td>
+              <td className="py-3 px-4 text-right font-mono text-base text-emerald-600 dark:text-emerald-400">
                 +{upperPossibleBonus}
               </td>
             </tr>
@@ -291,18 +291,18 @@ export default function ScorecardTable({
       </div>
 
       {/* Lower Section Header */}
-      <div className="bg-slate-50 px-6 py-4 border-b border-slate-200 border-t-2 border-t-slate-200/80 flex justify-between items-center">
+      <div className="bg-slate-50 dark:bg-slate-900/50 px-6 py-4 border-b border-slate-200 dark:border-slate-800 border-t-2 border-t-slate-200/80 dark:border-t-slate-800/80 flex justify-between items-center">
         <div>
-          <h3 className="font-bold text-slate-800 tracking-wide text-sm uppercase font-mono">
+          <h3 className="font-bold text-slate-800 dark:text-slate-200 tracking-wide text-sm uppercase font-mono">
             Lower Section
           </h3>
-          <p className="text-xs text-slate-400">Combinations, Straights, and Yahtzees</p>
+          <p className="text-xs text-slate-400 dark:text-slate-500">Combinations, Straights, and Yahtzees</p>
         </div>
 
         {/* Multi-Yahtzee Bonus indicator */}
         {yahtzeeBonusCount > 0 && (
-          <div className="bg-amber-100 text-amber-950 font-bold px-3 py-1.5 rounded-xl border border-amber-300 text-xs flex items-center gap-1.5 font-mono animate-pulse">
-            <Star className="w-3.5 h-3.5 fill-amber-500 stroke-amber-500" />
+          <div className="bg-amber-100 text-amber-950 dark:bg-amber-950/40 dark:text-amber-200 border border-amber-300 dark:border-amber-800 font-bold px-3 py-1.5 rounded-xl text-xs flex items-center gap-1.5 font-mono animate-pulse">
+            <Star className="w-3.5 h-3.5 fill-amber-500 stroke-amber-500 dark:fill-amber-500" />
             Yahtzee Bonus: +{yahtzeeBonusPoints}
           </div>
         )}
@@ -316,38 +316,38 @@ export default function ScorecardTable({
 
             {/* Yahtzee Bonus Row (always visible if bonus achieved) */}
             {yahtzeeBonusCount > 0 && (
-              <tr className="border-b border-slate-100 bg-amber-50/30 font-semibold text-slate-600">
+              <tr className="border-b border-slate-100 dark:border-slate-800/80 bg-amber-50/30 dark:bg-amber-950/10 font-semibold text-slate-600 dark:text-slate-400">
                 <td className="py-3 px-4">
                   <div className="flex flex-col">
                     <span className="text-sm">Yahtzee Bonus</span>
-                    <span className="text-[10px] text-amber-600">Additional Yahtzee Rolled (+100 each)</span>
+                    <span className="text-[10px] text-amber-600 dark:text-amber-500">Additional Yahtzee Rolled (+100 each)</span>
                   </div>
                 </td>
-                <td className="py-3 px-4 hidden sm:table-cell text-xs font-mono text-slate-400">
+                <td className="py-3 px-4 hidden sm:table-cell text-xs font-mono text-slate-400 dark:text-slate-500">
                   {yahtzeeBonusCount} x 100 pts
                 </td>
-                <td className="py-3 px-4 text-right font-mono text-amber-600 text-base">
+                <td className="py-3 px-4 text-right font-mono text-amber-600 dark:text-amber-400 text-base">
                   +{yahtzeeBonusPoints}
                 </td>
               </tr>
             )}
 
             {/* Lower Section Subtotal Row */}
-            <tr className="bg-slate-50/50 font-bold text-sm text-slate-700 border-b border-slate-200">
+            <tr className="bg-slate-50/50 dark:bg-slate-900/60 font-bold text-sm text-slate-700 dark:text-slate-300 border-b border-slate-200 dark:border-slate-800">
               <td className="py-3 px-4 font-mono uppercase text-xs">Lower Subtotal</td>
               <td className="py-3 px-4 hidden sm:table-cell" />
-              <td className="py-3 px-4 text-right font-mono text-base text-slate-800">
+              <td className="py-3 px-4 text-right font-mono text-base text-slate-800 dark:text-slate-200">
                 {lowerTotal}
               </td>
             </tr>
 
             {/* GRAND TOTAL */}
-            <tr className="bg-emerald-900 text-white font-extrabold text-lg border-b border-emerald-950">
+            <tr className="bg-emerald-900 dark:bg-emerald-950 text-white font-extrabold text-lg border-b border-emerald-950 dark:border-emerald-900">
               <td className="py-4.5 px-6 font-mono uppercase tracking-wider">Grand Total</td>
-              <td className="py-4.5 px-6 hidden sm:table-cell text-xs font-mono text-emerald-300 font-normal">
+              <td className="py-4.5 px-6 hidden sm:table-cell text-xs font-mono text-emerald-300 dark:text-emerald-400 font-normal">
                 Upper ({upperTotal}) + Lower ({lowerTotal})
               </td>
-              <td className="py-4.5 px-6 text-right font-mono text-2xl text-yellow-300">
+              <td className="py-4.5 px-6 text-right font-mono text-2xl text-yellow-300 dark:text-yellow-450">
                 {grandTotal}
               </td>
             </tr>

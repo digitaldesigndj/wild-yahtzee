@@ -65,10 +65,10 @@ function Die({
           transition-colors duration-300
           ${
             isWild
-              ? 'bg-gradient-to-br from-amber-400 via-yellow-400 to-amber-500 text-amber-950 border-4 border-amber-300 shadow-[0_10px_20px_rgba(245,158,11,0.3),_inset_0_-4px_8px_rgba(0,0,0,0.15),_inset_0_4px_8px_rgba(255,255,255,0.4)]'
+              ? 'bg-gradient-to-br from-amber-400 via-yellow-400 to-amber-500 text-amber-950 border-4 border-amber-300 shadow-[0_10px_20px_rgba(245,158,11,0.3),_inset_0_-4px_8px_rgba(0,0,0,0.15),_inset_0_4px_8px_rgba(255,255,255,0.4)] dark:shadow-[0_10px_25px_rgba(245,158,11,0.4),_inset_0_-4px_8px_rgba(0,0,0,0.3),_inset_0_4px_8px_rgba(255,255,255,0.4)]'
               : held
-              ? 'bg-emerald-50 text-emerald-900 border-4 border-emerald-500/80 shadow-[0_4px_12px_rgba(16,185,129,0.15),_inset_0_-2px_4px_rgba(0,0,0,0.05)]'
-              : 'bg-white text-slate-800 border-2 border-slate-200 hover:border-slate-300 shadow-[0_8px_16px_rgba(0,0,0,0.06),_inset_0_-3px_0px_rgba(0,0,0,0.08),_inset_0_3px_0px_rgba(255,255,255,0.8)]'
+              ? 'bg-emerald-50 text-emerald-900 border-4 border-emerald-500/80 shadow-[0_4px_12px_rgba(16,185,129,0.15),_inset_0_-2px_4px_rgba(0,0,0,0.05)] dark:bg-emerald-950 dark:text-emerald-100 dark:border-emerald-600'
+              : 'bg-white text-slate-800 border-2 border-slate-200 hover:border-slate-300 shadow-[0_8px_16px_rgba(0,0,0,0.06),_inset_0_-3px_0px_rgba(0,0,0,0.08),_inset_0_3px_0px_rgba(255,255,255,0.8)] dark:bg-slate-800 dark:text-slate-100 dark:border-slate-700 dark:hover:border-slate-600 dark:shadow-[0_8px_16px_rgba(0,0,0,0.4),_inset_0_-3px_0px_rgba(0,0,0,0.3),_inset_0_3px_0px_rgba(255,255,255,0.1)]'
           }
           focus:outline-none focus:ring-4 focus:ring-emerald-500/20
         `}
@@ -80,7 +80,7 @@ function Die({
               animate={{ scale: [1, 1.1, 1] }}
               transition={{ repeat: Infinity, duration: 1.5, ease: 'easeInOut' }}
             >
-              <Star className="w-8 h-8 fill-amber-950 stroke-amber-950" />
+              <Star className="w-8 h-8 fill-amber-950 stroke-amber-950 dark:fill-amber-950 dark:stroke-amber-950" />
             </motion.div>
             <span className="text-[10px] font-bold tracking-wider mt-1 uppercase font-mono">
               Wild
@@ -99,10 +99,10 @@ function Die({
                       ${hasPip ? 'opacity-100 scale-100' : 'opacity-0 scale-50'}
                       ${
                         held
-                          ? 'bg-emerald-800 shadow-[inset_0_1px_1px_rgba(0,0,0,0.2)]'
+                          ? 'bg-emerald-800 dark:bg-emerald-300 shadow-[inset_0_1px_1px_rgba(0,0,0,0.2)]'
                           : unrolled
-                          ? 'bg-slate-300 shadow-[inset_0_1px_1px_rgba(0,0,0,0.1)]'
-                          : 'bg-slate-800 shadow-[inset_0_1px_1px_rgba(0,0,0,0.4)]'
+                          ? 'bg-slate-300 dark:bg-slate-700 shadow-[inset_0_1px_1px_rgba(0,0,0,0.1)]'
+                          : 'bg-slate-800 dark:bg-slate-200 shadow-[inset_0_1px_1px_rgba(0,0,0,0.4)]'
                       }
                     `}
                   />
@@ -114,12 +114,12 @@ function Die({
 
         {/* Locked Overlay badge for held dice */}
         {held && !isWild && (
-          <div className="absolute -top-1.5 -right-1.5 bg-emerald-500 text-white p-1 rounded-full border border-emerald-100 shadow-md">
+          <div className="absolute -top-1.5 -right-1.5 bg-emerald-500 text-white p-1 rounded-full border border-emerald-100 dark:border-emerald-800 shadow-md">
             <Lock className="w-3 h-3" />
           </div>
         )}
         {isWild && (
-          <div className="absolute -top-1.5 -right-1.5 bg-amber-500 text-amber-950 p-1 rounded-full border border-amber-200 shadow-md">
+          <div className="absolute -top-1.5 -right-1.5 bg-amber-500 text-amber-950 p-1 rounded-full border border-amber-200 dark:border-amber-800 shadow-md">
             <Lock className="w-3 h-3" />
           </div>
         )}
@@ -128,7 +128,7 @@ function Die({
       {/* Held Label */}
       <span
         className={`text-xs font-semibold uppercase tracking-wider transition-all duration-300 ${
-          held ? 'text-emerald-600 opacity-100 scale-100' : 'text-slate-400 opacity-0 scale-90'
+          held ? 'text-emerald-600 dark:text-emerald-400 opacity-100 scale-100' : 'text-slate-400 dark:text-slate-600 opacity-0 scale-90'
         }`}
       >
         {isWild ? 'Auto-Held' : 'Held'}
@@ -149,11 +149,11 @@ export default function DiceCup({
   const isCupEmpty = dice.every((d) => d.value === 1 && !d.held && rollsLeft === 3); // initial state
 
   return (
-    <div className="bg-slate-50 border border-slate-200/60 rounded-3xl p-6 shadow-[inset_0_2px_4px_rgba(0,0,0,0.02),_0_10px_30px_-10px_rgba(0,0,0,0.04)] flex flex-col items-center">
+    <div className="bg-slate-50 border border-slate-200/60 rounded-3xl p-6 shadow-[inset_0_2px_4px_rgba(0,0,0,0.02),_0_10px_30px_-10px_rgba(0,0,0,0.04)] dark:bg-slate-900 dark:border-slate-800 dark:shadow-[inset_0_2px_4px_rgba(0,0,0,0.2),_0_10px_30px_-10px_rgba(0,0,0,0.5)] flex flex-col items-center">
       {/* Dice Tray Header */}
       <div className="w-full flex justify-between items-center mb-6">
         <div className="flex items-center gap-3">
-          <span className="text-sm font-bold text-slate-400 uppercase tracking-widest font-mono">
+          <span className="text-sm font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest font-mono">
             Dice Tray
           </span>
           <div className="flex gap-1">
@@ -165,7 +165,7 @@ export default function DiceCup({
                   className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
                     active
                       ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]'
-                      : 'bg-slate-200'
+                      : 'bg-slate-200 dark:bg-slate-800'
                   }`}
                 />
               );
@@ -175,10 +175,10 @@ export default function DiceCup({
 
         <div className="flex items-center gap-2">
           {/* Round Indicator Badge */}
-          <span className="bg-emerald-100 text-emerald-800 font-extrabold text-[10px] font-mono px-2 py-1 rounded-lg uppercase tracking-wide">
+          <span className="bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-400 font-extrabold text-[10px] font-mono px-2 py-1 rounded-lg uppercase tracking-wide">
             Round {currentRound} / 13
           </span>
-          <span className="text-xs font-mono font-medium text-slate-500 bg-slate-200/50 px-2.5 py-1 rounded-lg">
+          <span className="text-xs font-mono font-medium text-slate-500 dark:text-slate-400 bg-slate-200/50 dark:bg-slate-800/80 px-2.5 py-1 rounded-lg">
             {rollsLeft === 3 ? 'First Roll' : `Rolls: ${rollsLeft}`}
           </span>
         </div>
@@ -208,29 +208,29 @@ export default function DiceCup({
       {/* Helper label for interactive guidance */}
       <div className="h-6 flex items-center justify-center">
         {rollsLeft === 3 && !isRolling && (
-          <p className="text-xs font-medium text-slate-400 italic">
+          <p className="text-xs font-medium text-slate-400 dark:text-slate-500 italic">
             Click Roll to begin your turn!
           </p>
         )}
         {rollsLeft < 3 && rollsLeft > 0 && !isRolling && (
-          <p className="text-xs font-medium text-emerald-600 italic">
+          <p className="text-xs font-medium text-emerald-600 dark:text-emerald-400 italic">
             Tap dice to keep them, then roll the remaining.
           </p>
         )}
         {rollsLeft === 0 && !isRolling && (
-          <p className="text-xs font-medium text-amber-600 italic">
+          <p className="text-xs font-medium text-amber-600 dark:text-amber-500 italic">
             No rolls remaining! Score your turn in the scorecard.
           </p>
         )}
         {isRolling && (
-          <p className="text-xs font-medium text-slate-500 animate-pulse">
+          <p className="text-xs font-medium text-slate-500 dark:text-slate-400 animate-pulse">
             Tumbling the cup...
           </p>
         )}
       </div>
 
       {/* Action Controls */}
-      <div className="w-full border-t border-slate-200/60 mt-6 pt-6 flex flex-col sm:flex-row gap-3 justify-center items-center">
+      <div className="w-full border-t border-slate-200/60 dark:border-slate-800 mt-6 pt-6 flex flex-col sm:flex-row gap-3 justify-center items-center">
         <motion.button
           id="roll-dice-button"
           onClick={onRoll}
@@ -241,8 +241,8 @@ export default function DiceCup({
             w-full sm:w-auto px-8 py-3.5 rounded-2xl font-bold tracking-wide transition-all duration-300 flex items-center justify-center gap-3 cursor-pointer shadow-md
             ${
               hasUnusedRolls && !isRolling
-                ? 'bg-slate-900 text-white hover:bg-slate-800 hover:shadow-lg focus:ring-4 focus:ring-slate-900/20'
-                : 'bg-slate-100 text-slate-400 border border-slate-200 shadow-none cursor-not-allowed'
+                ? 'bg-slate-900 text-white hover:bg-slate-800 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white hover:shadow-lg focus:ring-4 focus:ring-slate-900/20 dark:focus:ring-white/20'
+                : 'bg-slate-100 text-slate-400 border border-slate-200 dark:bg-slate-800 dark:text-slate-600 dark:border-slate-800 shadow-none cursor-not-allowed'
             }
           `}
         >
