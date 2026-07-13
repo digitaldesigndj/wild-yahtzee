@@ -5,8 +5,10 @@
 
 class AudioSynth {
   private ctx: AudioContext | null = null;
+  public muted = false;
 
   private init() {
+    if (this.muted) return null;
     if (!this.ctx) {
       const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
       if (AudioCtx) {

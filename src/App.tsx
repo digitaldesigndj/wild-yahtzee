@@ -12,6 +12,9 @@ import {
   ChevronUp,
   AlertCircle,
   Flame,
+  Volume2,
+  VolumeX,
+  BarChart3,
 } from 'lucide-react';
 import { CategoryId, DieState, DieValue, GameHistoryEntry, GameStats, Scorecard } from './types';
 import { evaluateCategory, isYahtzeeRoll } from './utils/yahtzeeEvaluator';
@@ -71,8 +74,70 @@ export default function App() {
   
   // Game Lifecycle States
   const [isGameOver, setIsGameOver] = useState<boolean>(false);
-  const [showRules, setShowRules] = useState<boolean>(true);
+  const [showRules, setShowRules] = useState<boolean>(() => {
+    try {
+      const saved = localStorage.getItem('wild_yahtzee_show_rules');
+      return saved !== null ? JSON.parse(saved) : true;
+    } catch {
+      return true;
+    }
+  });
+  const [showStats, setShowStats] = useState<boolean>(() => {
+    try {
+      const saved = localStorage.getItem('wild_yahtzee_show_stats');
+      return saved !== null ? JSON.parse(saved) : true;
+    } catch {
+      return true;
+    }
+  });
+  const [isMuted, setIsMuted] = useState<boolean>(() => {
+    try {
+      const saved = localStorage.getItem('wild_yahtzee_is_muted');
+      const mutedValue = saved !== null ? JSON.parse(saved) : false;
+      audio.muted = mutedValue; // Sync initial property on mount
+      return mutedValue;
+    } catch {
+      return false;
+    }
+  });
   const [sessionWildsCount, setSessionWildsCount] = useState<number>(0);
+
+  const toggleMute = () => {
+    setIsMuted((prev) => {
+      const newVal = !prev;
+      audio.muted = newVal;
+      try {
+        localStorage.setItem('wild_yahtzee_is_muted', JSON.stringify(newVal));
+      } catch (e) {
+        console.error(e);
+      }
+      return newVal;
+    });
+  };
+
+  const toggleRules = () => {
+    setShowRules((prev) => {
+      const newVal = !prev;
+      try {
+        localStorage.setItem('wild_yahtzee_show_rules', JSON.stringify(newVal));
+      } catch (e) {
+        console.error(e);
+      }
+      return newVal;
+    });
+  };
+
+  const toggleStats = () => {
+    setShowStats((prev) => {
+      const newVal = !prev;
+      try {
+        localStorage.setItem('wild_yahtzee_show_stats', JSON.stringify(newVal));
+      } catch (e) {
+        console.error(e);
+      }
+      return newVal;
+    });
+  };
 
   // Statistics States
   const [stats, setStats] = useState<GameStats>(DEFAULT_STATS);
@@ -352,10 +417,41 @@ export default function App() {
           </p>
         </div>
 
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2 justify-center md:justify-end">
+          {/* Mute Button */}
+          <button
+            id="mute-toggle-button"
+            onClick={toggleMute}
+            className="flex items-center gap-2 px-4 py-2 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-600 cursor-pointer shadow-sm transition-all dark:bg-slate-900 dark:hover:bg-slate-800 dark:border-slate-800 dark:text-slate-300"
+            title={isMuted ? 'Unmute Audio' : 'Mute Audio'}
+          >
+            {isMuted ? (
+              <>
+                <VolumeX className="w-4 h-4 text-red-500 dark:text-red-400 animate-pulse" />
+                <span>Muted</span>
+              </>
+            ) : (
+              <>
+                <Volume2 className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
+                <span>Mute</span>
+              </>
+            )}
+          </button>
+
+          {/* Stats Toggle Button */}
+          <button
+            id="stats-toggle-button"
+            onClick={toggleStats}
+            className="flex items-center gap-2 px-4 py-2 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-600 cursor-pointer shadow-sm transition-all dark:bg-slate-900 dark:hover:bg-slate-800 dark:border-slate-800 dark:text-slate-300"
+          >
+            <BarChart3 className="w-4 h-4 text-slate-500 dark:text-slate-400" />
+            {showStats ? 'Hide Stats' : 'Show Stats'}
+          </button>
+
+          {/* Rules Toggle Button */}
           <button
             id="rules-toggle-button"
-            onClick={() => setShowRules(!showRules)}
+            onClick={toggleRules}
             className="flex items-center gap-2 px-4 py-2 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-600 cursor-pointer shadow-sm transition-all dark:bg-slate-900 dark:hover:bg-slate-800 dark:border-slate-800 dark:text-slate-300"
           >
             <BookOpen className="w-4 h-4 text-slate-500 dark:text-slate-400" />
@@ -485,7 +581,18 @@ export default function App() {
           />
 
           {/* Stats & Match History Panel (moved below scorecard) */}
-          <StatsPanel stats={stats} history={history} onResetStats={handleResetStats} />
+          <AnimatePresence>
+            {showStats && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                className="overflow-hidden"
+              >
+                <StatsPanel stats={stats} history={history} onResetStats={handleResetStats} />
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </main>
     </div>
