@@ -1,0 +1,19 @@
+{
+  "short_name": "Wild Yahtzee",
+  "name": "Wild Yahtzee — Classic Game with a Wild Twist",
+  "description": "Play Wild Yahtzee, a classic Yahtzee dice game with an exciting twist: a unique 7th die with Wild Card mechanics.",
+  "icons": [
+    {
+      "src": "/src/assets/images/yahtzee_favicon_1783898223301.jpg",
+      "type": "image/jpeg",
+      "sizes": "192x192 512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#020617",
+  "theme_color": "#020617",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "categories": ["games", "entertainment"]
+}

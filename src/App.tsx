@@ -15,6 +15,7 @@ import {
   Volume2,
   VolumeX,
   BarChart3,
+  Download,
 } from 'lucide-react';
 import { CategoryId, DieState, DieValue, GameHistoryEntry, GameStats, Scorecard } from './types';
 import { evaluateCategory, isYahtzeeRoll } from './utils/yahtzeeEvaluator';
@@ -101,6 +102,44 @@ export default function App() {
     }
   });
   const [sessionWildsCount, setSessionWildsCount] = useState<number>(0);
+
+  // PWA Install Prompt state
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [isAppInstalled, setIsAppInstalled] = useState<boolean>(false);
+
+  useEffect(() => {
+    const handleBeforeInstallPrompt = (e: Event) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+    };
+
+    const handleAppInstalled = () => {
+      setIsAppInstalled(true);
+      setDeferredPrompt(null);
+    };
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    window.addEventListener('appinstalled', handleAppInstalled);
+
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      setIsAppInstalled(true);
+    }
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+      window.removeEventListener('appinstalled', handleAppInstalled);
+    };
+  }, []);
+
+  const handleInstallClick = async () => {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    if (outcome === 'accepted') {
+      setIsAppInstalled(true);
+    }
+    setDeferredPrompt(null);
+  };
 
   const toggleMute = () => {
     setIsMuted((prev) => {
@@ -418,6 +457,19 @@ export default function App() {
         </div>
 
         <div className="flex flex-wrap gap-2 justify-center md:justify-end">
+          {/* PWA Install Button */}
+          {deferredPrompt && !isAppInstalled && (
+            <button
+              id="pwa-install-button"
+              onClick={handleInstallClick}
+              className="flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold cursor-pointer shadow-md transition-all dark:bg-emerald-600 dark:hover:bg-emerald-500 animate-bounce"
+              title="Install Wild Yahtzee app"
+            >
+              <Download className="w-4 h-4" />
+              <span>Install App</span>
+            </button>
+          )}
+
           {/* Mute Button */}
           <button
             id="mute-toggle-button"
